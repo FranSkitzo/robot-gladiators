@@ -23,14 +23,16 @@ var fight = function(enemyName) {
       if (confirmSkip) {
         window.alert(playerName + ' has decided to skip this fight. Goodbye!');
         // subtract money from playerMoney for skipping
-        playerMoney = playerMoney - 10;
+        playerMoney = Math.max(0, playerMoney - 10);
         console.log("playerMoney", playerMoney)
         break;
       }
     }
 
     // remove enemy's health by subtracting the amount set in the playerAttack variable
-    enemyHealth = enemyHealth - playerAttack;
+    var damage = randomNumber(playerAttack - 3, playerAttack);
+
+    enemyHealth = Math.max(0, enemyHealth - damage);
     console.log(
       playerName + ' attacked ' + enemyName + '. ' + enemyName + ' now has ' + enemyHealth + ' health remaining.'
     );
@@ -49,7 +51,9 @@ var fight = function(enemyName) {
     }
 
     // remove players's health by subtracting the amount set in the enemyAttack variable
-    playerHealth = playerHealth - enemyAttack;
+    var damage = randomNumber(enemyAttack - 3, enemyAttack);
+
+    playerHealth = Math.max(0, playerHealth - damage);
     console.log(
       enemyName + ' attacked ' + playerName + '. ' + playerName + ' now has ' + playerHealth + ' health remaining.'
     );
@@ -76,7 +80,7 @@ var startGame = function() {
         window.alert("Welcome to Robot Gladiators!" + ( i + 1 ) );
         var pickedEnemyName = enemyNames[i];
     
-    enemyHealth = 50;
+    enemyHealth = randomNumber(40, 60);
     // call fight function with enemy-robot
     fight(pickedEnemyName);
       }
@@ -98,10 +102,16 @@ var startGame = function() {
     endGame();
   };
 
+  var randomNumber = function(min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
+
+    return value;
+  };
+
   var endGame = function() {
     window.alert("The game has now ended.  Let's see how you did!");
     if (playerHealth > 0) {
-      window.alert("Great job, you've survived the game! You now hav a  score of " + playerMoney + "."); 
+      window.alert("Great job, you've survived the game! You now have a score of " + playerMoney + "."); 
     }
     else {
       window.alert("You've lost your robot in battle.");
@@ -123,6 +133,7 @@ var shop = function() {
   // use switch to carry out action
   switch (shopOptionPrompt) {
     case "refill":
+    case "REFILL":
       window.alert("Refilling player's health by 20 for 7 dollars.");
 
       // increase health and decrease money
@@ -130,6 +141,7 @@ var shop = function() {
       playerMoney = playerMoney - 7;
       break;
     case "upgrade":
+    case "UPRGRADE":
       window.alert("Upgrading player's attack by 6 for 7 dollars.");
 
       // increase attack and decrease money
@@ -138,6 +150,7 @@ var shop = function() {
       break;
 
       case "leave":
+      case "LEAVE":
         window.alert("Leaving the store.");
 
         // do nothing, so funciton will end
